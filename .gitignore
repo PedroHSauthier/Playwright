@@ -1,0 +1,3 @@
+.pytest_cache
+playwrightVenv/
+testes/__pycache__
