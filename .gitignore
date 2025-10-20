@@ -2,3 +2,4 @@
 playwrightVenv/
 testes/__pycache__
 playVenv/
+.env
