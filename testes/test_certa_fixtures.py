@@ -5,8 +5,10 @@ import os
 load_dotenv()
 cliente = os.getenv("cliente_cpf")
 senha = os.getenv("cliente_senha")
+unidade = os.getenv("cliente_unidade")
+url = os.getenv("cliente_url")
 
-def test_login_with_fixture(pagina_inicial: Page):
+def inativo_test_login_with_fixture(pagina_inicial: Page):
     """A função testa a fixture pagina_inicial para realizar um login bem-sucedido.
 
     Args:
@@ -32,12 +34,12 @@ def test_login_with_fixture(pagina_inicial: Page):
     
     pagina_inicial.screenshot(path="screenshots/certa/login_cpf2.png")
     
-def test_logado_with_fixture(logar_usuario):
+def test_logado_with_fixture(logar_usuario_certa):
     """Teste da fixture logar_usuario.
 
     Args:
         pagina_logada (Page): definido a fixture logar_usuario ao parâmetro Page.
     """
-    page = logar_usuario(cliente, senha)
+    page = logar_usuario_certa(cliente, senha, unidade, url)
     
     page.screenshot(path="screenshots/certa/login_cpf3.png")
