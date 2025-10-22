@@ -16,6 +16,7 @@ def logar_usuario_certa(page: Page):
         page.goto(url)
         expect(page.locator('#app')).to_be_visible()
         
+        page.reload()
         #Preenche o CPF e a Senha
         page.get_by_label("CPF - Usuário").fill(cpf)
         page.get_by_label("Senha").fill(senha)
@@ -40,8 +41,8 @@ def logar_usuario_certa(page: Page):
         page.get_by_role("button", name="Login").click()
         
         #Seleciona a primeira unidade cadastrada no perfil do usuário.
-        expect(page.get_by_role("option")).to_be_visible()
-        if(unidade != ""):
+        expect(page.get_by_role("listbox")).to_be_visible()
+        if(unidade == ""):
             page.get_by_role("option").first.click()    
         else:
             page.get_by_text(unidade).click()

@@ -8,7 +8,7 @@ senha = os.getenv("cliente_senha")
 unidade = os.getenv("cliente_unidade")
 url = os.getenv("cliente_url")
 
-def inativo_test_login_with_fixture(pagina_inicial: Page):
+def test_login_with_fixture(pagina_inicial: Page):
     """A função testa a fixture pagina_inicial para realizar um login bem-sucedido.
 
     Args:

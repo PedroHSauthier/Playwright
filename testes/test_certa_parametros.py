@@ -5,15 +5,17 @@ from dotenv import load_dotenv
 load_dotenv()
 cpf = os.getenv("cliente_cpf")
 senha = os.getenv("cliente_senha")
+unidade = os.getenv("cliente_unidade")
+url = os.getenv("cliente_url")
 
-def test_baixar_relatorios(logar_usuario):
+def test_baixar_relatorios(logar_usuario_certa):
     """Realiza a atualização de todos os relatórios considerados de importância no sistema, baixando eles da loja.
 
     Args:
         logar_usuario (_type_): _description_
     """
     
-    pl = logar_usuario(cpf, senha)
+    pl = logar_usuario_certa(cpf, senha, unidade, url)
     
     # pesquisar loja na tela inicial
     menu = pl.locator("#menusistema")
