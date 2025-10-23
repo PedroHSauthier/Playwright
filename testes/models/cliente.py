@@ -33,3 +33,10 @@ class Cliente:
             raise ValueError(f"Perfil de cliente '{perfil}' não encontrado em {caminho_json}")
             
         return Cliente(**dados_perfil)
+    
+def carregar_nomes_clientes() -> list[str]:
+    caminho_json = Path(__file__).parent.parent.parent / "dados_teste" / "clientes.json"
+    
+    with open(caminho_json, 'r', encoding='utf-8') as f:
+        dados = json.load(f)
+    return list(dados.keys())
