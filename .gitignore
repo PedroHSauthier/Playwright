@@ -3,3 +3,4 @@ playwrightVenv/
 testes/__pycache__
 playVenv/
 .env
+clientes.json

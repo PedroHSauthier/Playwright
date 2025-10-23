@@ -1,0 +1,20 @@
+{
+  "cliente_admin": {
+    "cpf": "SEU_CPF_AQUI",
+    "senha": "SUA_SENHA_AQUI",
+    "unidade": "SUA_UNIDADE_AQUI",
+    "url": "URL_DO_SISTEMA"
+  },
+  "cliente_secundario": {
+    "cpf": "CPF_DO_CLIENTE_2",
+    "senha": "SENHA_DO_CLIENTE_2",
+    "unidade": "UNIDADE_DO_CLIENTE_2",
+    "url": "URL_DO_SISTEMA"
+  },
+  "cliente_sem_permissao": {
+    "cpf": "CPF_DO_CLIENTE_3",
+    "senha": "SENHA_DO_CLIENTE_3",
+    "unidade": "UNIDADE_DO_CLIENTE_3",
+    "url": "URL_DO_SISTEMA"
+  }
+}
