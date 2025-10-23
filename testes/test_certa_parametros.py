@@ -1,12 +1,7 @@
 from playwright.sync_api import Page, expect
-import os
-from dotenv import load_dotenv
+from models.cliente import Cliente
 
-load_dotenv()
-cpf = os.getenv("cliente_cpf")
-senha = os.getenv("cliente_senha")
-unidade = os.getenv("cliente_unidade")
-url = os.getenv("cliente_url")
+cliente_teste = Cliente.carregar_dados_cliente("cliente_admin_homologacao")
 
 def test_baixar_relatorios(logar_usuario_certa):
     """Realiza a atualização de todos os relatórios considerados de importância no sistema, clicando no botão de download na loja e confirmando a ação.
@@ -15,12 +10,12 @@ def test_baixar_relatorios(logar_usuario_certa):
         logar_usuario_certa: Fixture para logar o usuário no sistema.
     """
     
-    page = logar_usuario_certa(cpf, senha, unidade, url)
+    page = logar_usuario_certa(cliente_teste)
     
     # Pesquisar "loja" na tela inicial para encontrar a Loja de Relatórios
     menu = page.locator("#menusistema")
     menu.get_by_role("textbox").click()
-    menu.get_by_role("textbox").press_sequentially("loja", delay=100)
+    menu.get_by_role("textbox").press_sequentially("loja", delay=50)
     
     # Abrir a Loja de Relatórios
     item_loja = page.get_by_text("Loja de Relatorios", exact=True)
