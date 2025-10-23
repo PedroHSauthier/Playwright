@@ -17,8 +17,6 @@ def test_baixar_relatorios(logar_usuario_certa, perfil_cliente):
     
     # A fixture de login recebe o objeto cliente.
     page = logar_usuario_certa(cliente_teste)
-    
-    print(f"\nExecutando teste para o perfil: {perfil_cliente}")
 
     # Pesquisar "loja" na tela inicial para encontrar a Loja de Relatórios
     menu = page.locator("#menusistema")
@@ -46,7 +44,3 @@ def test_baixar_relatorios(logar_usuario_certa, perfil_cliente):
         
         # Esperar explicitamente o popup desaparecer para evitar race conditions.
         expect(popup).to_be_hidden()
-        
-        print(f"Ação de download confirmada para o relatório {i+1} do perfil {perfil_cliente}")
-
-    page.screenshot(path=f"screenshots/certa/relatorios_baixados_{perfil_cliente}.png")
