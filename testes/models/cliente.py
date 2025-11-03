@@ -34,9 +34,8 @@ class Cliente:
             
         return Cliente(**dados_perfil)
     
-def carregar_nomes_clientes() -> list[str]:
+def carregar_nomes_clientes(selecao: str) -> list[str]:
     caminho_json = Path(__file__).parent.parent.parent / "dados_teste" / "clientes.json"
-    
     with open(caminho_json, 'r', encoding='utf-8') as f:
         dados = json.load(f)
-    return list(dados.keys())
+    return [nome for nome in dados.keys() if selecao in nome.lower()]

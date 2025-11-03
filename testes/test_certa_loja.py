@@ -2,7 +2,7 @@ from playwright.sync_api import expect
 import pytest
 from models.cliente import Cliente, carregar_nomes_clientes
 
-@pytest.mark.parametrize("perfil_cliente", carregar_nomes_clientes())
+@pytest.mark.parametrize("perfil_cliente", carregar_nomes_clientes("homologacao"))
 def test_baixar_relatorios(logar_usuario_certa, perfil_cliente):
     """Realiza a atualização de todos os relatórios da loja para um determinado perfil de cliente.
     Este teste é parametrizado e será executado para todos os perfis em clientes.json.
@@ -31,16 +31,31 @@ def test_baixar_relatorios(logar_usuario_certa, perfil_cliente):
     # Espera o primeiro grupo de relatórios carregar para garantir que a página está pronta
     expect(page.get_by_text("Grupo: Agendamento")).to_be_visible()
     
-    # Obter todos os botões de download da página.
-    download_buttons = page.locator('a[title="Download"]').all()
-
-    # Iterar sobre cada botão de download e clicar nele.
-    for i, button in enumerate(download_buttons):
+    # Contador para os botões de download já processados
+    i = 0
+    while True:
+        # Reavalia a lista de botões de download a cada iteração
+        download_buttons = page.locator('a[title="Download"]').all()
+        
+        # Se não houver mais botões para processar na lista atual, saia do loop
+        if i >= len(download_buttons):
+            break
+            
+        # Pega o próximo botão da lista
+        button = download_buttons[i]
+        
+        # Rola a página até que o botão esteja visível
+        button.scroll_into_view_if_needed()
+        
+        # Clica no botão de download
         button.click()
         
-        # Localizar o popup visível e, dentro dele, clicar no botão "Sim".
+        # Localiza o popup de confirmação e clica em "Sim"
         popup = page.locator(".dx-overlay-content:has-text('Confirma o Download?'):visible")
         popup.get_by_role("button", name="Sim").click()
         
-        # Esperar explicitamente o popup desaparecer para evitar race conditions.
+        # Espera o popup desaparecer
         expect(popup).to_be_hidden()
+        
+        # Incrementa o contador para processar o próximo botão na próxima iteração
+        i += 1
