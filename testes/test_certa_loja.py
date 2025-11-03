@@ -28,34 +28,33 @@ def test_baixar_relatorios(logar_usuario_certa, perfil_cliente):
     expect(item_loja).to_be_visible()
     item_loja.click()
 
-    # Espera o primeiro grupo de relatórios carregar para garantir que a página está pronta
-    expect(page.get_by_text("Grupo: Agendamento")).to_be_visible()
-    
-    # Contador para os botões de download já processados
-    i = 0
-    while True:
-        # Reavalia a lista de botões de download a cada iteração
-        download_buttons = page.locator('a[title="Download"]').all()
-        
-        # Se não houver mais botões para processar na lista atual, saia do loop
-        if i >= len(download_buttons):
-            break
-            
-        # Pega o próximo botão da lista
-        button = download_buttons[i]
-        
-        # Rola a página até que o botão esteja visível
+    # Lista de todos os grupos de relatórios
+    grupos = [
+        "Agendamento", "Atendimentos", "Atestado", "Auxilios", "Cadastrais",
+        "Comprovante Medicamentos", "Encaminhamento para especialidades",
+        "Etiqueta medicamento", "HORUS", "Medicamentos / Materiais",
+        "Orientações", "Outros Procedimentos", "Parecer", "Posologia",
+        "Prontuário", "Receituário", "Roteiro Veículos",
+        "Roteiro Veículos Comprovante", "Solicitação de exame",
+        "Solicitação de retorno", "TFD"
+    ]
+
+    # Itera sobre cada grupo para garantir que todos os relatórios sejam carregados
+    for grupo in grupos:
+        # Espera o grupo estar visível, rolando se necessário
+        group_locator = page.get_by_text(f"Grupo: {grupo}", exact=True)
+        group_locator.scroll_into_view_if_needed()
+        expect(group_locator).to_be_visible()
+
+    # Depois de percorrer todos os grupos, todos os botões de download devem estar presentes no DOM
+    download_buttons = page.locator('a[title="Download"]').all()
+
+    # Itera sobre todos os botões de download e clica em cada um
+    for button in download_buttons:
         button.scroll_into_view_if_needed()
-        
-        # Clica no botão de download
         button.click()
         
-        # Localiza o popup de confirmação e clica em "Sim"
         popup = page.locator(".dx-overlay-content:has-text('Confirma o Download?'):visible")
+        expect(popup).to_be_visible()
         popup.get_by_role("button", name="Sim").click()
-        
-        # Espera o popup desaparecer
         expect(popup).to_be_hidden()
-        
-        # Incrementa o contador para processar o próximo botão na próxima iteração
-        i += 1
