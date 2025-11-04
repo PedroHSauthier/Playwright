@@ -1,7 +1,6 @@
 .pytest_cache
 playwrightVenv/
-testes/__pycache__
 playVenv/
 .env
 clientes.json
-testes/Parametros/__pycache__
+__pycache__/
