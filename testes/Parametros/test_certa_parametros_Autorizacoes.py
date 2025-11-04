@@ -2,7 +2,7 @@ from playwright.sync_api import expect
 import pytest
 from models.cliente import Cliente, carregar_nomes_clientes
 
-cliente = "homologacao"
+cliente = ["homologacao", "admin"]
 
 @pytest.mark.parametrize("perfil_cliente", carregar_nomes_clientes(cliente))
 def test_modificar_parametros_autorizacoes_vacina(logar_usuario_certa, perfil_cliente):

@@ -7,6 +7,19 @@ cliente = "homologacao"
 @pytest.mark.parametrize("perfil_cliente", carregar_nomes_clientes(cliente))
 def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     """
+    Testa a modificação de parâmetros na seção 'Modelo Impressão' da aba 'TFD'.
+
+    Este teste executa as seguintes ações:
+    1. Realiza o login no sistema utilizando o perfil de cliente fornecido.
+    2. Navega até a tela de 'Parâmetros' do sistema.
+    3. Acessa a aba 'TFD' e, em seguida, a seção 'Modelo Impressão'.
+    4. Modifica os modelos de impressão para 'Modelo tfd Frente', 'Modelo tfd Verso' e 'Modelo tfd Comprovante'.
+    5. Tira um screenshot da tela de parâmetros de TFD.
+    6. Salva as alterações e verifica se a mensagem de sucesso é exibida.
+
+    Args:
+        logar_usuario_certa (fixture): Fixture para realizar o login do usuário no sistema.
+        perfil_cliente (str): O nome do perfil do cliente a ser testado.
     """
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
@@ -79,7 +92,9 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     popup_tfdcomprovante.get_by_text("PROCESSO TFD COMPROVANTE - A4", exact=True).click()
     expect(popup_tfdcomprovante).to_be_hidden()
     
+    # Tira um screenshot da tela para verificação visual.
     page.screenshot(path="screenshots/certa/parametrosTFD.png")
+    
     # Salva as alterações e verifica a mensagem de sucesso.
     page.get_by_role("button", name="Salvar").click()
     expect(page.get_by_text("sucesso")).to_be_visible()
