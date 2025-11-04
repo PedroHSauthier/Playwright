@@ -1,6 +1,9 @@
 from playwright.sync_api import Page, expect
 import pytest
 from models.cliente import Cliente
+from datetime import datetime
+from pathlib import Path
+import os
 
 @pytest.fixture
 def pagina_inicial(page: Page):
@@ -55,3 +58,38 @@ def logar_usuario_certa(page: Page):
         return page
     
     yield logar
+
+def pytest_configure(config):
+    """
+    Cria um nome de arquivo de relatório HTML dinâmico.
+    Se um único arquivo de teste for executado, o relatório é salvo em um
+    subdiretório correspondente com um nome baseado no arquivo de teste.
+    Caso contrário, um relatório genérico com timestamp é criado no diretório 'reports'.
+    """
+    now = datetime.now()
+    root_report_dir = Path(__file__).parent.parent / "reports"
+    
+    # Verifica se um único arquivo de teste está sendo executado
+    if len(config.args) == 1 and os.path.isfile(config.args[0]):
+        test_path = Path(config.args[0])
+        
+        # Diretório pai do teste
+        parent_dir_name = test_path.parent.name
+        
+        # Subdiretório de relatórios
+        report_dir = root_report_dir / parent_dir_name
+        
+        # Última parte do nome do arquivo de teste
+        test_filename = test_path.stem
+        last_part = test_filename.split('_')[-1]
+        
+        report_filename = f"report_{last_part}_{now.strftime('%Y-%m-%d_%H-%M-%S')}.html"
+        
+    else:
+        # Fallback para múltiplos testes ou execução de diretório
+        report_dir = root_report_dir
+        report_filename = f"report_session_{now.strftime('%Y-%m-%d_%H-%M-%S')}.html"
+
+    report_dir.mkdir(parents=True, exist_ok=True)
+    config.option.htmlpath = report_dir / report_filename
+    config.option.self_contained_html = True

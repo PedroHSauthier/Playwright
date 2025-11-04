@@ -4,3 +4,4 @@ playVenv/
 .env
 clientes.json
 __pycache__/
+reports/
