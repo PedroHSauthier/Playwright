@@ -92,9 +92,6 @@ def test_modificar_parametros_empresa(logar_usuario_certa, perfil_cliente):
     popup_alvara3.get_by_text("ALVARÁ SANITÁRIO - MODELO 3 - A4", exact=True).click()
     expect(popup_alvara3).to_be_hidden()
     
-    # Tira um screenshot da tela para verificação visual.
-    page.screenshot(path="screenshots/certa/parametrosEmpresa.png")
-    
     # Salva as alterações e verifica a mensagem de sucesso.
     page.get_by_role("button", name="Salvar").click()
     expect(page.get_by_text("sucesso")).to_be_visible()
