@@ -5,3 +5,6 @@ playVenv/
 clientes.json
 __pycache__/
 reports/
+html/
+screenshots/
+.vscode
