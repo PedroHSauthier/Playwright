@@ -2,19 +2,22 @@ from playwright.sync_api import expect
 import pytest
 from models.cliente import Cliente, carregar_nomes_clientes
 from models.individuo import Individuo, carregar_cpf_individuos, carregar_dados_individuo_por_cpf
+import logging
 
 cliente = ["homologacao", "admin"]
-parametros_individuais = ["completo", ]
+parametros_individuais = ["completo"]
 
 @pytest.mark.parametrize("perfil_cliente", carregar_nomes_clientes(cliente))
 @pytest.mark.parametrize("individuo_cpf", carregar_cpf_individuos())
-def test_modificar_individual_cadastro_Teste(logar_usuario_certa, perfil_cliente):
+def test_modificar_individual_cadastro_Teste(logar_usuario_certa, individuo_cpf, perfil_cliente):
     """
     """
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
+    individuo_teste = Individuo.carregar_dados_individuo_por_cpf(individuo_cpf)
     
+    logging.info
     # A fixture de login recebe o objeto cliente e retorna a página.
     page = logar_usuario_certa(cliente_teste)
 
