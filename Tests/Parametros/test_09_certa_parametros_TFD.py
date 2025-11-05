@@ -1,6 +1,9 @@
 from playwright.sync_api import expect
 import pytest
 from models.cliente import Cliente, carregar_nomes_clientes
+import logging
+
+log = logging.getLogger(__name__)
 
 cliente = "homologacao"
 
@@ -22,11 +25,14 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
         perfil_cliente (str): O nome do perfil do cliente a ser testado.
     """
     
+    
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
+    log.info(f"Iniciando teste de parâmetros de TFD para o perfil: {perfil_cliente}")
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
     
     # A fixture de login recebe o objeto cliente e retorna a página.
     page = logar_usuario_certa(cliente_teste)
+    log.info(f"Usuário {cliente_teste.cpf} logado.")
 
     # Pesquisa por "Parâmetros" no menu do sistema para acessar a tela de configuração.
     menu = page.locator("#menusistema")
@@ -37,12 +43,15 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     item_parametro = page.get_by_text("Parâmetros", exact=True)
     expect(item_parametro).to_be_visible()
     item_parametro.click()
+    log.info("Navegou para a página Parâmetros")
     
     # --- Seção: TFD -> Modelo Impressão ---
     # Acessa a aba 'TFD' e rola até a seção 'Modelo Impressão'.
     page.locator("div.dx-list-item:has-text('TFD')").click()
+    log.info("Acessou a aba 'Empresa'.")
     page.get_by_text('Modelo Impressão', exact=True).scroll_into_view_if_needed()
     expect(page.get_by_text('Modelo Impressão', exact=True)).to_be_visible()
+    
     
     # 1. Modifica o "Modelo tfd frente".
     campo_tfdfrente = page.get_by_label("Modelo tfd Frente", exact=True)
