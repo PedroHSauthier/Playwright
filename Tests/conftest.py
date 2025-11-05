@@ -63,36 +63,66 @@ def logar_usuario_certa(page: Page):
 
 def pytest_configure(config):
     """
-    Cria um nome de arquivo de relatório HTML dinâmico.
-    Se um único arquivo de teste for executado, o relatório é salvo em um
-    subdiretório correspondente com um nome baseado no arquivo de teste.
-    Caso contrário, um relatório genérico com timestamp é criado no diretório 'reports'.
+    Cria um nome de arquivo de relatório HTML dinâmico com base no contexto de execução.
+    - Se múltiplos arquivos ou diretórios são testados, o relatório é salvo em um
+      subdiretório com o nome do diretório pai comum.
+    - Se um único arquivo é testado, o subdiretório é o do diretório pai do arquivo.
+    - Como fallback (nenhum argumento), usa o nome do diretório raiz do projeto.
+    - Os relatórios são organizados em pastas por data (dd-mm-yyyy).
+    - Mantém apenas os 3 relatórios mais recentes em cada pasta de data.
     """
     now = datetime.now()
     root_report_dir = Path(__file__).parent.parent / "reports"
     
-    # Verifica se um único arquivo de teste está sendo executado
+    parent_dir_name = None
+    
+    # Determina o nome do diretório pai com base nos argumentos do pytest
+    if config.args:
+        # Converte todos os argumentos para caminhos absolutos
+        absolute_paths = [Path(arg).resolve() for arg in config.args]
+        
+        if len(absolute_paths) == 1:
+            # Se for um único argumento, usa o nome do diretório pai se for arquivo, ou o próprio nome se for diretório
+            path = absolute_paths[0]
+            if path.is_file():
+                parent_dir_name = path.parent.name
+            else:
+                parent_dir_name = path.name
+        else:
+            # Se forem múltiplos argumentos, encontra o caminho comum
+            common_path = Path(os.path.commonpath(absolute_paths))
+            # Verifica se o caminho comum é um diretório de fato. Se for um arquivo, pega o pai.
+            if common_path.is_file():
+                parent_dir_name = common_path.parent.name
+            else:
+                parent_dir_name = common_path.name
+    
+    # Fallback: se nenhum argumento for passado, usa o nome do diretório raiz do projeto
+    if not parent_dir_name:
+        parent_dir_name = Path(__file__).parent.parent.name
+
+    # Cria o diretório do relatório com a data
+    date_str = now.strftime('%d-%m-%Y')
+    report_dir = root_report_dir / parent_dir_name / date_str
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    # --- Lógica de Rotação de Relatórios ---
+    # Lista os relatórios existentes e os ordena por data de modificação (do mais antigo para o mais novo)
+    existing_reports = sorted(report_dir.glob('*.html'), key=os.path.getmtime)
+    
+    # Se já existirem 3 ou mais relatórios, remove o mais antigo
+    if len(existing_reports) >= 3:
+        os.remove(existing_reports[0])
+
+    # Define o nome do arquivo de relatório
     if len(config.args) == 1 and os.path.isfile(config.args[0]):
-        test_path = Path(config.args[0])
-        
-        # Diretório pai do teste
-        parent_dir_name = test_path.parent.name
-        
-        # Subdiretório de relatórios
-        report_dir = root_report_dir / parent_dir_name
-        
-        # Última parte do nome do arquivo de teste
-        test_filename = test_path.stem
+        test_filename = Path(config.args[0]).stem
         last_part = test_filename.split('_')[-1]
-        
         report_filename = f"report_{last_part}_{now.strftime('%Y-%m-%d_%H-%M-%S')}.html"
-        
     else:
-        # Fallback para múltiplos testes ou execução de diretório
-        report_dir = root_report_dir
         report_filename = f"report_session_{now.strftime('%Y-%m-%d_%H-%M-%S')}.html"
 
-    report_dir.mkdir(parents=True, exist_ok=True)
+    # Define o caminho completo do relatório nas opções do pytest
     config.option.htmlpath = report_dir / report_filename
     config.option.self_contained_html = True
     

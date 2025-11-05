@@ -48,10 +48,10 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     # --- Seção: TFD -> Modelo Impressão ---
     # Acessa a aba 'TFD' e rola até a seção 'Modelo Impressão'.
     page.locator("div.dx-list-item:has-text('TFD')").click()
-    log.info("Acessou a aba 'Empresa'.")
+    log.info("Acessou a aba 'TFD'.")
     page.get_by_text('Modelo Impressão', exact=True).scroll_into_view_if_needed()
     expect(page.get_by_text('Modelo Impressão', exact=True)).to_be_visible()
-    
+    log.info("Esperou o agrupamento Modelo Impressão estar visível.")
     
     # 1. Modifica o "Modelo tfd frente".
     campo_tfdfrente = page.get_by_label("Modelo tfd Frente", exact=True)
@@ -59,6 +59,7 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     campo_tfdfrente.scroll_into_view_if_needed()
     campo_tfdfrente.wait_for(state="visible", timeout=3000)
     campo_tfdfrente.click()
+    log.info("Abriu o popup do item Modelo tfd frente")
 
     # Aguarda o popup de seleção aparecer, preenche e seleciona o modelo.
     popup_tfdfrente = page.locator(".dx-overlay-content.dx-popup-normal.dx-resizable:visible")
@@ -68,6 +69,7 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     expect(popup_tfdfrente.get_by_text("PROCESSO TFD FRENTE - A4", exact=True)).to_be_visible()
     popup_tfdfrente.get_by_text("PROCESSO TFD FRENTE - A4", exact=True).click()
     expect(popup_tfdfrente).to_be_hidden()
+    log.info("Vinculado o modelo PROCESSO TFD FRENTE - A4 ao item Modelo tfd frente.")
     
     # 2. Modifica o "Modelo tfd Verso".
     campo_tfdverso = page.get_by_label("Modelo tfd Verso", exact=True)
@@ -75,6 +77,7 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     campo_tfdverso.scroll_into_view_if_needed()
     campo_tfdverso.wait_for(state="visible", timeout=3000)
     campo_tfdverso.click()
+    log.info("Abriu o popup do item Modelo tfd verso")
 
     # Aguarda o popup de seleção aparecer, preenche e seleciona o modelo.
     popup_tfdverso = page.locator(".dx-overlay-content.dx-popup-normal.dx-resizable:visible")
@@ -84,6 +87,7 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     expect(popup_tfdverso.get_by_text("PROCESSO TFD VERSO - A4", exact=True)).to_be_visible()
     popup_tfdverso.get_by_text("PROCESSO TFD VERSO - A4", exact=True).click()
     expect(popup_tfdverso).to_be_hidden()
+    log.info("Vinculado o modelo PROCESSO TFD VERSO - A4 ao item Modelo tfd verso.")
     
     # 3. Modifica o "Modelo tfd Comprovante".
     campo_tfdcomprovante = page.get_by_label("Modelo tfd Comprovante", exact=True)
@@ -91,6 +95,7 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     campo_tfdcomprovante.scroll_into_view_if_needed()
     campo_tfdcomprovante.wait_for(state="visible", timeout=3000)
     campo_tfdcomprovante.click()
+    log.info("Abriu o popup do item Modelo tfd Comprovante")
 
     # Aguarda o popup de seleção aparecer, preenche e seleciona o modelo.
     popup_tfdcomprovante = page.locator(".dx-overlay-content.dx-popup-normal.dx-resizable:visible")
@@ -100,10 +105,9 @@ def test_modificar_parametros_TFD(logar_usuario_certa, perfil_cliente):
     expect(popup_tfdcomprovante.get_by_text("PROCESSO TFD COMPROVANTE - A4", exact=True)).to_be_visible()
     popup_tfdcomprovante.get_by_text("PROCESSO TFD COMPROVANTE - A4", exact=True).click()
     expect(popup_tfdcomprovante).to_be_hidden()
-    
-    # Tira um screenshot da tela para verificação visual.
-    page.screenshot(path="screenshots/certa/parametrosTFD.png")
+    log.info("Vinculado o modelo PROCESSO TFD CONPROVANTE - A4 ao item Modelo tfd Comprovante.")
     
     # Salva as alterações e verifica a mensagem de sucesso.
     page.get_by_role("button", name="Salvar").click()
     expect(page.get_by_text("sucesso")).to_be_visible()
+    log.info(f"A pagina com as alterações previstas foram salvas. Teste TFD com o perfil {cliente_teste.cpf} na unidade {cliente_teste.unidade} foi concluído.")

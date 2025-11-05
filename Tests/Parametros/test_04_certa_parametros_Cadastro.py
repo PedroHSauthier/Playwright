@@ -16,11 +16,11 @@ def test_modificar_parametros_cadastro(logar_usuario_certa, perfil_cliente):
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
-    log.debug(f"Dados do cliente carregados: {cliente_teste.nome_completo}")
+    log.debug(f"Dados do cliente carregados: {cliente_teste.cpf}")
     
     # A fixture de login recebe o objeto cliente.
     page = logar_usuario_certa(cliente_teste)
-    log.info(f"Usuário {cliente_teste.nome_completo} logado com sucesso.")
+    log.info(f"Usuário {cliente_teste.cpf} logado com sucesso.")
 
     # Pesquisar "Parâmetros" na tela inicial para encontrar a page Parâmetros
     menu = page.locator("#menusistema")
@@ -60,4 +60,4 @@ def test_modificar_parametros_cadastro(logar_usuario_certa, perfil_cliente):
     page.get_by_role("button", name="Salvar").click()
     log.info("Salvando as alterações.")
     expect(page.get_by_text("sucesso")).to_be_visible()
-    log.info(f"Teste 'modificar_parametros_cadastro' concluído com sucesso para o perfil: {perfil_cliente}")
+    log.info(f"A pagina com as alterações previstas foram salvas. Teste Cadastro com o perfil {cliente_teste.cpf} na unidade {cliente_teste.unidade} foi concluído.")

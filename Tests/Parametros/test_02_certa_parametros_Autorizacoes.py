@@ -27,11 +27,11 @@ def test_modificar_parametros_autorizacoes_vacina(logar_usuario_certa, perfil_cl
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
-    log.debug(f"Dados do cliente carregados: {cliente_teste.nome_completo}")
+    log.debug(f"Dados do cliente carregados: {cliente_teste.cpf}")
     
     # A fixture de login recebe o objeto cliente e retorna a página.
     page = logar_usuario_certa(cliente_teste)
-    log.info(f"Usuário {cliente_teste.nome_completo} logado com sucesso.")
+    log.info(f"Usuário {cliente_teste.cpf} logado com sucesso.")
 
     # Pesquisa por "Parâmetros" no menu do sistema para acessar a tela de configuração.
     menu = page.locator("#menusistema")
@@ -97,11 +97,11 @@ def test_modificar_parametros_autorizacoes_outrosprocedimentos(logar_usuario_cer
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
-    log.debug(f"Dados do cliente carregados: {cliente_teste.nome_completo}")
+    log.debug(f"Dados do cliente carregados: {cliente_teste.cpf}")
     
     # A fixture de login recebe o objeto cliente e retorna a página.
     page = logar_usuario_certa(cliente_teste)
-    log.info(f"Usuário {cliente_teste.nome_completo} logado com sucesso.")
+    log.info(f"Usuário {cliente_teste.cpf} logado com sucesso.")
 
     # Pesquisa por "Parâmetros" no menu do sistema para acessar a tela de configuração.
     menu = page.locator("#menusistema")
@@ -167,11 +167,11 @@ def test_modificar_parametros_autorizacoes_filaencaminhamento(logar_usuario_cert
     
     # Carrega os dados do cliente a partir do perfil fornecido pelo pytest.
     cliente_teste = Cliente.carregar_dados_cliente(perfil_cliente)
-    log.debug(f"Dados do cliente carregados: {cliente_teste.nome_completo}")
+    log.debug(f"Dados do cliente carregados: {cliente_teste.cpf}")
     
     # A fixture de login recebe o objeto cliente e retorna a página.
     page = logar_usuario_certa(cliente_teste)
-    log.info(f"Usuário {cliente_teste.nome_completo} logado com sucesso.")
+    log.info(f"Usuário {cliente_teste.cpf} logado com sucesso.")
 
     # Pesquisa por "Parâmetros" no menu do sistema para acessar a tela de configuração.
     menu = page.locator("#menusistema")
