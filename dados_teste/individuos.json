@@ -183,10 +183,10 @@
             "GrupoDeExame": ["BIOQUIMICA", "EPIDEMIO"]
         }
     },
-    "pedroteste_minimo_semunidade_brasileiro_ativo": {
+    "pedroteste_minimo_curitibanos_brasileiro_ativo": {
         "identificacao": {
             "CNS": "999999999999997",
-            "CPF": "17961631984",
+            "CPF": "27961631992",
             "DataNasc": "02082005",
             "Nome": "Pedro Teste do Sistema",
             "Sexo": "MASCULINO",
