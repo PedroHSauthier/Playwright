@@ -11,11 +11,19 @@ function App() {
   const [selectedFile, setSelectedFile] = useState({ path: null, content: null });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
+  const fetchFileStructure = () => {
     fetch('/api/files')
       .then(response => response.json())
       .then(data => setFileStructure(data))
       .catch(error => console.error('Error fetching file structure:', error));
+  };
+
+  useEffect(() => {
+    fetchFileStructure(); // Fetch immediately on mount
+
+    const intervalId = setInterval(fetchFileStructure, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   const handleFileSelect = (filePath) => {
