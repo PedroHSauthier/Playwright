@@ -1,5 +1,5 @@
 {
-    "pedroteste_completo_semunidade_brasileiro_ativo": {
+    "pedroteste_completo_curitibanos_brasileiro_ativo": {
         "identificacao": {
             "CNS": "999999999999997",
             "CPF": "17961631984",
@@ -45,7 +45,7 @@
             "Observacao": "Teste da Observacao dos documentos pessoais"
         },
         "VinculoDomiciliar": {
-            "Unidade": "",
+            "Unidade": "P. A CENTRAL",
             "Equipe": "",
             "ACS": "",
             "ProfResponsavel": "",
@@ -137,6 +137,50 @@
             "MotivoSaida": "",
             "DataObito": "",
             "NumeroObito": ""
+        },
+        "Profissional": {
+            "Inicio": "01012000",
+            "Categoria_CBO": "2232",
+            "Senha": "123",
+            "Ativo": "True",
+            "Nome_Profissional": "Pedro Teste Dentista Completo",
+            "Lotacoes": [
+                {
+                    "EstabelecimentoAtendimento": "P. A CENTRAL",
+                    "EquipeAtendimento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "EstabelicimentoFaturamento": "P. A CENTRAL",
+                    "EquipeFaturamento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "Horario": "HORÁRIO PADRÃO",
+                    "Microarea": "01", 
+                    "Conselho": "CONSELHO REGIONAL DE ODONTOLOGIA",
+                    "NumeroConselho": "123",
+                    "RQE": "456",
+                    "Procedimento": "DRENAGEM DE ABSCESSO ANU-RETAL",
+                    "PerfisDeAcesso": ["admin"],
+                    "GeraEsus": "True",
+                    "VisualizaProntuario": "True",
+                    "Telesaude": "True",
+                    "Ativo": "True"
+                },
+                {
+                    "EstabelecimentoAtendimento": "ALMOXARIFADO CENTRAL",
+                    "EquipeAtendimento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "EstabelicimentoFaturamento": "ALMOXARIFADO CENTRAL",
+                    "EquipeFaturamento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "Horario": "HORÁRIO PADRÃO",
+                    "Microarea": "02", 
+                    "Conselho": "CONSELHO REGIONAL DE ODONTOLOGIA",
+                    "NumeroConselho": "789",
+                    "RQE": "098",
+                    "Procedimento": "DRENAGEM DE ABSCESSO ANU-RETAL",
+                    "PerfisDeAcesso": ["admin"],
+                    "GeraEsus": "True",
+                    "VisualizaProntuario": "True",
+                    "Telesaude": "True",
+                    "Ativo": "True"
+                }
+            ],
+            "GrupoDeExame": ["BIOQUIMICA", "EPIDEMIO"]
         }
     },
     "pedroteste_minimo_semunidade_brasileiro_ativo": {
@@ -277,6 +321,33 @@
             "MotivoSaida": "",
             "DataObito": "",
             "NumeroObito": ""
+        },
+        "Profissional": {
+            "Inicio": "01012000",
+            "Categoria_CBO": "2232",
+            "Senha": "123",
+            "Ativo": "True",
+            "Nome_Profissional": "Pedro Teste Dentista Minimo",
+            "Lotacoes": [
+                {
+                    "EstabelecimentoAtendimento": "P. A CENTRAL",
+                    "EquipeAtendimento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "EstabelicimentoFaturamento": "P. A CENTRAL",
+                    "EquipeFaturamento": "ESB - EQUIPE DE SAUDE BUCAL",
+                    "Horario": "HORÁRIO PADRÃO",
+                    "Microarea": "", 
+                    "Conselho": "",
+                    "NumeroConselho": "",
+                    "RQE": "",
+                    "Procedimento": "",
+                    "PerfisDeAcesso": ["admin"],
+                    "GeraEsus": "False",
+                    "VisualizaProntuario": "True",
+                    "Telesaude": "False",
+                    "Ativo": "True"
+                }
+            ],
+            "GrupoDeExame": [""]
         }
     }
 }
