@@ -122,11 +122,46 @@ def pytest_configure(config):
     config.option.htmlpath = report_dir / report_filename
     config.option.self_contained_html = True
     
+class HTMLFormatter(logging.Formatter):
+    """
+    Formatter personalizado para criar logs em formato de tabela HTML.
+    """
+    def __init__(self):
+        super().__init__()
+        self.level_colors = {
+            logging.DEBUG: '#A9A9A9',    # DarkGray
+            logging.INFO: '#00008B',     # DarkBlue
+            logging.WARNING: '#FF8C00',  # DarkOrange
+            logging.ERROR: '#DC143C',    # Crimson
+            logging.CRITICAL: '#8B0000', # DarkRed
+        }
+
+    def format(self, record):
+        level_color = self.level_colors.get(record.levelno, 'black')
+        
+        # Formata a mensagem base e escapa caracteres HTML
+        log_message = record.getMessage()
+        log_message = log_message.replace('\n', '<br>')
+        
+        # Formata o traceback em uma seção expansível
+        if record.exc_info:
+            traceback_html = self.formatException(record.exc_info)
+            traceback_html = traceback_html.replace('\n', '<br>')
+            log_message += f'<details><summary>Traceback (clique para expandir)</summary><pre><code>{traceback_html}</code></pre></details>'
+
+        return f"""
+            <tr>
+                <td>{datetime.fromtimestamp(record.created).strftime('%Y-%m-%d %H:%M:%S')}</td>
+                <td style="color: {level_color}; font-weight: bold;">{record.levelname}</td>
+                <td>{record.name}</td>
+                <td>{log_message}</td>
+            </tr>
+        """
+
 @pytest.fixture(scope="module", autouse=True)
 def log_test_module(request):
     """
-    Cria um manipulador de log de arquivo exclusivo para cada módulo de teste.
-    O arquivo de log é salvo em uma estrutura de diretórios dinâmica e a quantidade de logs é limitada.
+    Cria um manipulador de log de arquivo HTML exclusivo para cada módulo de teste.
     """
     log_root = logging.getLogger()
     log_file_format = request.config.getini("log_file_format")
@@ -143,27 +178,68 @@ def log_test_module(request):
     time_str = now.strftime('%H-%M-%S')
 
     log_dir = Path(__file__).parent.parent / "logs" / parent_dir_name / date_str / dynamic_name
-    log_dir.mkdir(parents=True, exist_ok=True);
+    log_dir.mkdir(parents=True, exist_ok=True)
 
     # --- Lógica de Rotação de Logs ---
-    existing_logs = sorted(log_dir.glob('*.log'), key=os.path.getmtime)
+    existing_logs = sorted(log_dir.glob('*.html'), key=os.path.getmtime)
     while len(existing_logs) >= log_file_limit:
         os.remove(existing_logs.pop(0))
 
-    log_filename = f"log_{log_name_base}_{time_str}.log"
+    log_filename = f"log_{log_name_base}_{time_str}.html"
     log_path = log_dir / log_filename
 
-    handler = logging.FileHandler(log_path, mode='w', encoding='utf-8')
+    # --- Escreve o Cabeçalho HTML ---
+    header = f"""
+    <html>
+    <head>
+        <title>Log Report: {test_filename_stem}</title>
+        <style>
+            body {{ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; margin: 20px; }}
+            h2 {{ color: #333; }}
+            table {{ border-collapse: collapse; width: 100%; font-size: 14px; }}
+            th, td {{ border: 1px solid #dddddd; text-align: left; padding: 8px; }}
+            tr:nth-child(even) {{ background-color: #f2f2f2; }}
+            th {{ background-color: #4CAF50; color: white; }}
+            details {{ cursor: pointer; }}
+            summary {{ font-weight: bold; }}
+            pre {{ background-color: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }}
+        </style>
+    </head>
+    <body>
+        <h2>Log Report for: {test_filename_stem}</h2>
+        <p>Generated on: {now.strftime('%Y-%m-%d %H:%M:%S')}</p>
+        <table>
+            <tr>
+                <th style="width: 150px;">Time</th>
+                <th style="width: 80px;">Level</th>
+                <th style="width: 200px;">Logger Name</th>
+                <th>Message</th>
+            </tr>
+    """
+    with open(log_path, 'w', encoding='utf-8') as f:
+        f.write(header)
+
+    # --- Configura e adiciona o handler ---
+    handler = logging.FileHandler(log_path, mode='a', encoding='utf-8')
     handler.setLevel(log_file_level)
-    formatter = logging.Formatter(log_file_format)
+    formatter = HTMLFormatter()
     handler.setFormatter(formatter)
     
     log_root.addHandler(handler)
 
     yield
 
+    # --- Escreve o Rodapé HTML e Finaliza ---
     log_root.removeHandler(handler)
     handler.close()
+    
+    footer = """
+        </table>
+    </body>
+    </html>
+    """
+    with open(log_path, 'a', encoding='utf-8') as f:
+        f.write(footer)
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -223,7 +299,7 @@ def pytest_runtest_makereport(item, call):
                 screenshot_path = screenshot_dir / screenshot_filename
                 counter += 1
             
-            page.screenshot(path=str(screenshot_path), full_page=True)
+            page.screenshot(path=str(screenshot_path), full_page=True, scale='device')
             
         except Exception as e:
             print(f"Erro ao tirar screenshot: {e}")
