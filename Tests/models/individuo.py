@@ -11,6 +11,7 @@ class Individuo:
     VinculoDomiciliar: dict
     InformacoesESUS: dict
     SaidaDoCidadao: dict
+    Profissional: dict
 
     @staticmethod
     def carregar_todos_individuos() -> Dict[str, 'Individuo']:
